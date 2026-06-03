@@ -18,10 +18,33 @@ jobs:
         run: |
           pip install pyinstaller
 
+      # 🖼️ Step 1: Download PNG icon
+      - name: Download icon
+        run: |
+          curl -L -o dummyfinance.png https://raw.githubusercontent.com/BADRUMBADRUM/DummyFinance/main/dummyfinance.png
+
+      # 🍏 Step 2: Convert PNG → ICNS
+      - name: Create macOS icon (.icns)
+        run: |
+          mkdir icon.iconset
+
+          sips -z 16 16     dummyfinance.png --out icon.iconset/icon_16x16.png
+          sips -z 32 32     dummyfinance.png --out icon.iconset/icon_16x16@2x.png
+          sips -z 128 128   dummyfinance.png --out icon.iconset/icon_128x128.png
+          sips -z 256 256   dummyfinance.png --out icon.iconset/icon_128x128@2x.png
+          sips -z 512 512   dummyfinance.png --out icon.iconset/icon_512x512.png
+
+          iconutil -c icns icon.iconset -o DummyFinance.icns
+
+      # 🧱 Step 3: Build app with PyInstaller
       - name: Build app
         run: |
-          pyinstaller --onefile --windowed --name DummyFinance main.py
+          pyinstaller --onefile --windowed \
+            --name DummyFinance \
+            --icon DummyFinance.icns \
+            main.py
 
+      # 📦 Step 4: Upload result
       - name: Upload build
         uses: actions/upload-artifact@v4
         with:
