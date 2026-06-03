@@ -8,5 +8,5 @@ A super simple app to keep track of monthly expenses
 (|     | )
 /'\_   _/`\
 \___)=(___/
-</pre>
 Too download the app on linux simply download the linux_download.sh and run it in console
+</pre>
